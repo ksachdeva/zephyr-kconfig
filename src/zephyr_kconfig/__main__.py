@@ -54,9 +54,13 @@ def main(
     logging.basicConfig(level=LOG_LEVELS.get(loglevel, logging.WARNING))
     logging.getLogger("zephyr_kconfig").setLevel(LOG_LEVELS.get(loglevel, logging.WARNING))
 
-    assert release_name is not None  # for type checker
+    major, minor, _ = map(int, release_name.split("."))
 
-    # file_name
+    if major != 4 or minor < 1:
+        typer.echo("Unsupported Zephyr release. Only 4.1 and above are supported.")
+        sys.exit(1)
+
+    # cache file_name
     file_name = cache_directory().joinpath(f"kconfig-{release_name}.json")
 
     if file_name.exists() and cache:
