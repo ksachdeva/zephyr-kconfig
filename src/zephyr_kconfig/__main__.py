@@ -78,12 +78,13 @@ def main(
 def get(
     ctx: typer.Context,
     name: Annotated[str, typer.Argument(help="The CONFIG_XX to get")],
+    exact: Annotated[bool, typer.Option(help="Whether to match the name exactly")] = False,
 ) -> None:
     """Print the CONFIG_XX symbol entries as json output"""
 
     state = cast(CmdState, ctx.obj)
 
-    config_items = state.doc.get_symbols(name)
+    config_items = state.doc.get_symbols(name, exact=exact)
 
     sys.stdout.write(
         KConfigDoc(
@@ -98,12 +99,13 @@ def get(
 def describe(
     ctx: typer.Context,
     name: Annotated[str, typer.Argument(help="The CONFIG_XX to describe")],
+    exact: Annotated[bool, typer.Option(help="Whether to match the name exactly")] = False,
 ) -> None:
     """Describe the CONFIG_XXX symbol"""
 
     state = cast(CmdState, ctx.obj)
 
-    config_items = state.doc.get_symbols(name)
+    config_items = state.doc.get_symbols(name, exact=exact)
 
     if not config_items:
         rprint(f"[red]Error: Symbol {name} not found in KConfig document.[/red]")

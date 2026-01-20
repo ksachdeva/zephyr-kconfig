@@ -113,10 +113,14 @@ class KConfigDoc(BaseModel):
     zephyr_version: str
     symbols: list[KConfigDocItem] = []
 
-    def get_symbols(self, name: str) -> list[KConfigDocItem]:
+    def get_symbols(self, name: str, exact: bool = False) -> list[KConfigDocItem]:
         """Return the KConfigDocItems that start with the given name, or None if not found."""
         results = []
         for s in self.symbols:
-            if s.name.startswith(name):
-                results.append(s)
+            if exact:
+                if s.name == name:
+                    results.append(s)
+            else:
+                if s.name.startswith(name):
+                    results.append(s)
         return results
