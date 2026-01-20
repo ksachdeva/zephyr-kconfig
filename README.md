@@ -11,7 +11,7 @@ Various tools/helpers/cli to assist with Zephyr's KConfig
 uvx --from zepyhr-kconfig --help
 ```
 
-### Install as `uv` as tool
+### Install as a tool (via `uv`)
 
 ```bash
 # installs the current version
