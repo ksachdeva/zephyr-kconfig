@@ -79,6 +79,8 @@ def get(
     ctx: typer.Context,
     name: Annotated[str, typer.Argument(help="The CONFIG_XX to get")],
     exact: Annotated[bool, typer.Option(help="Whether to match the name exactly")] = False,
+    indent: Annotated[int, typer.Option(help="Number of spaces to indent the JSON output, -1 to have no indent")] = 2,
+    metadata: Annotated[bool, typer.Option(help="Whether to include metadata fields in the output")] = False,
 ) -> None:
     """Print the CONFIG_XX symbol entries as json output"""
 
@@ -86,13 +88,19 @@ def get(
 
     config_items = state.doc.get_symbols(name, exact=exact)
 
-    sys.stdout.write(
-        KConfigDoc(
-            gh_base_url=state.doc.gh_base_url,
-            zephyr_version=state.doc.zephyr_version,
-            symbols=config_items,
-        ).model_dump_json(indent=2)
+    doc = KConfigDoc(
+        gh_base_url=state.doc.gh_base_url,
+        zephyr_version=state.doc.zephyr_version,
+        symbols=config_items,
+    ).model_dump_json(
+        indent=indent if indent >= 0 else None,
+        include={"gh_base_url", "zephyr_version", "symbols"},
+        exclude={"symbols": {"__all__": {"filename", "linenr", "menupath"}}} if metadata is False else {},
+        exclude_defaults=True,
+        exclude_none=True,
     )
+
+    sys.stdout.write(doc)
 
 
 @cli_app.command()

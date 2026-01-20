@@ -22,7 +22,7 @@ class KConfigDocItem(BaseModel):
     ranges: list[str] = []
     choices: list[str] = []
 
-    alt_defaults: list[str]
+    alt_defaults: list[str] = []
     filename: str
     linenr: int
     menupath: str
