@@ -44,20 +44,37 @@ Below examples are assuming you are running the tool globally
 
 > Note - uvx does sandboxing (virtualenv) for you so no need to worry
 
-```bash
-# show the description of CONFIG_LWM2M_SHELL
-uvx zepyhr-kconfig --release 4.3.0 describe CONFIG_LWM2M_SHELL
-```
 
-![Example output](docs/images/single_describe_example.png)
-
+### Get info on a KConfig item
 
 ```bash
 # get the description as JSON output for CONFIG_LWM2M_SHELL
-uvx zepyhr-kconfig --release 4.3.0 describe CONFIG_LWM2M_SHELL
+uvx zepyhr-kconfig --release 4.3.0 get CONFIG_LWM2M_SHELL
 ```
 
 ![Example output](docs/images/single_get_example.png)
 
-> A partial CONFIG spec will get all items that start with the provided inpu for
+> A partial CONFIG spec will get all items that start with the provided input for
   example CONFIG_LWM2M_ will output all L2M2M config items
+
+> Use `--exact` to get the info on CONFIG_LWM2M only
+
+> Use `--metadata` to get some extra fields (such as linenr, menupath etc)
+
+> Use `--indent -1` to remove any indentation (default is 2)
+
+### Get deps on a KConfig item
+
+```bash
+# get the description as JSON output for CONFIG_LWM2M_SHELL
+uvx zepyhr-kconfig --release 4.3.0 deps CONFIG_LWM2M_SHELL
+```
+
+### Pretty Print KConfig item(s)
+
+```bash
+# show the description of CONFIG_LWM2M_SHELL
+uvx zepyhr-kconfig --release 4.3.0 pprint CONFIG_LWM2M_SHELL
+```
+
+> Use `--exact` to print only for CONFIG_LWM2M_SHELL
