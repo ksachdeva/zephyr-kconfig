@@ -96,12 +96,12 @@ def get(
 
 
 @cli_app.command()
-def describe(
+def pprint(
     ctx: typer.Context,
     name: Annotated[str, typer.Argument(help="The CONFIG_XX to describe")],
     exact: Annotated[bool, typer.Option(help="Whether to match the name exactly")] = False,
 ) -> None:
-    """Describe the CONFIG_XXX symbol"""
+    """Pretty print the details about CONFIG_XXX symbol(s)"""
 
     state = cast(CmdState, ctx.obj)
 
