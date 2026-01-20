@@ -36,7 +36,7 @@ def main(
     release: Annotated[
         str,
         typer.Option(
-            help="Zephyr release name (Only 4.1 and above are supported)",
+            help="Zephyr release name (Only 4.1 and above are supported) e.g. 4.3.0, 4.2.0, 4.1.0, latest",
         ),
     ],
     loglevel: Annotated[
@@ -52,11 +52,12 @@ def main(
     logging.basicConfig(level=LOG_LEVELS.get(loglevel, logging.WARNING))
     logging.getLogger("zephyr_kconfig").setLevel(LOG_LEVELS.get(loglevel, logging.WARNING))
 
-    major, minor, _ = map(int, release.split("."))
+    if release != "latest":
+        major, minor, _ = map(int, release.split("."))
 
-    if major != 4 or minor < 1:
-        typer.echo("Unsupported Zephyr release. Only 4.1 and above are supported.")
-        sys.exit(1)
+        if major != 4 or minor < 1:
+            typer.echo("Unsupported Zephyr release. Only 4.1 and above are supported.")
+            sys.exit(1)
 
     # cache file_name
     file_name = cache_directory().joinpath(f"kconfig-{release}.json")
