@@ -66,15 +66,21 @@ uvx zepyhr-kconfig --release 4.3.0 get CONFIG_LWM2M_SHELL
 ### Get deps on a KConfig item
 
 ```bash
-# get the description as JSON output for CONFIG_LWM2M_SHELL
+# get the dependencies for CONFIG_LWM2M_SHELL
 uvx zepyhr-kconfig --release 4.3.0 deps CONFIG_LWM2M_SHELL
 ```
+
+For above example output would be:
+
+`CONFIG_LWM2M && CONFIG_NETWORKING`
+
+> The input symbol should be exact
 
 ### Pretty Print KConfig item(s)
 
 ```bash
-# show the description of CONFIG_LWM2M_SHELL
+# show the description of symbol(s)
 uvx zepyhr-kconfig --release 4.3.0 pprint CONFIG_LWM2M_SHELL
 ```
 
-> Use `--exact` to print only for CONFIG_LWM2M_SHELL
+> Use `--exact` to print only one symbol
