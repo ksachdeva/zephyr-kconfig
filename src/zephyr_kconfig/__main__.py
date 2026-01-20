@@ -105,6 +105,32 @@ def get(
 
 
 @cli_app.command()
+def deps(
+    ctx: typer.Context,
+    name: Annotated[str, typer.Argument(help="The CONFIG_XX whose dependencies to get")],
+) -> None:
+    """Print the dependencies string of CONFIG_XX symbol [Must pass an exact name]"""
+
+    state = cast(CmdState, ctx.obj)
+
+    config_items = state.doc.get_symbols(name, exact=True)
+
+    # Note-
+    # [Check] Some CONFIG_XX symbols may have multiple entries (e.g. if defined in multiple Kconfig files)
+    # Hence it is an array. This needs revisit.
+
+    if len(config_items) == 0:
+        sys.stderr.write(f"Error: Symbol {name} not found in KConfig or is not exact.\n")
+        return
+
+    for c in config_items:
+        if c.dependencies:
+            sys.stdout.write(f"{c.dependencies}\n")
+        else:
+            sys.stdout.write(f"No dependencies for {c.name}\n")
+
+
+@cli_app.command()
 def pprint(
     ctx: typer.Context,
     name: Annotated[str, typer.Argument(help="The CONFIG_XX to describe")],
