@@ -1,5 +1,6 @@
 import logging
 import sys
+from pathlib import Path
 from typing import Annotated, Any, cast
 
 import typer
@@ -14,6 +15,7 @@ from zephyr_kconfig._locations import cache_directory
 from zephyr_kconfig._types import CmdState
 
 from ._doc_loaders import from_release
+from ._graph import build_split_graph, write_graphml
 from ._models import KConfigDoc, KConfigDocItem
 
 _LOGGER = logging.getLogger(__name__)
@@ -73,6 +75,7 @@ def main(
     ctx.ensure_object(CmdState)
     ctx.obj = CmdState()
     ctx.obj.doc = kconfig_doc
+    ctx.obj.graph = build_split_graph(kconfig_doc)
 
 
 @cli_app.command()
@@ -204,3 +207,16 @@ def pprint(
 
     for item in config_items:
         _display_config_item(console, item)
+
+
+@cli_app.command()
+def serialize_graph(
+    ctx: typer.Context,
+    output: Annotated[Path, typer.Argument(help="Output file path to save the serialized graph (e.g. graph.graphml)")],
+) -> None:
+    """Serialize the dependency graph to a GraphML file."""
+
+    state = cast(CmdState, ctx.obj)
+    G = state.graph
+
+    write_graphml(G, output)
